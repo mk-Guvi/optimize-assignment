@@ -1,5 +1,5 @@
-import BlogPostCard from "../components/BlogPostCard";
-import Newsletter from "../components/Newsletter";
+import BlogPostCard from "./_components/BlogPostCard";
+import Newsletter from "./_components/Newsletter";
 
 export default function Blog() {
   return (

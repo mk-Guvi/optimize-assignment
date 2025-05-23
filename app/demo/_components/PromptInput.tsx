@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { Button } from "../../components/common/Button";
 
 interface PromptInputProps {
   prompt: string;
@@ -68,17 +69,17 @@ export default function PromptInput({
         id="prompt"
         value={localPrompt}
         onChange={handlePromptChange}
-        className="w-full h-32 p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+        className="w-full h-32 p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 outline-none focus:border-transparent"
         placeholder="A serene landscape with mountains and a lake at sunset..."
       />
       <div className="text-sm text-gray-500 mt-1">{charCountDisplay}</div>
-      <button
+      <Button
         onClick={handleGenerate}
         disabled={isButtonDisabled}
-        className="w-full mt-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+       className="mt-4 w-full"
       >
         {buttonText}
-      </button>
+      </Button>
     </div>
   );
 }

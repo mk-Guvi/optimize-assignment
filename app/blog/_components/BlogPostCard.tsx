@@ -1,3 +1,4 @@
+import OpImage from "@/app/components/OpImage";
 import Link from "next/link";
 
 interface BlogPost {
@@ -17,7 +18,14 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
   return (
     <article className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
       <div className="relative h-48">
-        <img src={post.image} className="object-cover" />
+        <OpImage
+          src={post.image}
+          loading="lazy"
+          className={`object-cover w-full h-full transition-opacity duration-300`}
+          alt={post.title}
+          width={100}
+          height={100}
+        />
       </div>
       <div className="p-6">
         <div className="flex items-center mb-4">
@@ -33,6 +41,7 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
         <p className="text-gray-600 dark:text-gray-300 mb-4">{post.excerpt}</p>
         <Link
           href={post.link}
+          
           className="inline-flex items-center text-purple-600 hover:text-purple-700"
         >
           Read More

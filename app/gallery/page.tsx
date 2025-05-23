@@ -1,8 +1,7 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { createClient } from "pexels";
+import OpImage from "../components/OpImage";
+import PaginationControls from "./Pagination";
 
 interface Photo {
   id: number;
@@ -14,111 +13,132 @@ interface Photo {
   photographerUrl: string;
 }
 
-export default function Gallery() {
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface GalleryProps {
+  searchParams: {
+    page?: string;
+    per_page?: string;
+  };
+}
 
-  useEffect(() => {
-    const fetchPhotos = async () => {
-      console.log(
-        "fetching photos with API key",
-        process.env.NEXT_PUBLIC_PEXELS_API_KEY
-      );
-      try {
-        const client = createClient(
-          process.env.NEXT_PUBLIC_PEXELS_API_KEY || ""
-        );
-        const response = await client.photos.search({
-          query: "ai generated art",
-          per_page: 80,
-        });
+const PHOTOS_PER_PAGE = 25;
 
-        if ("error" in response) {
-          throw new Error(response.error);
-        }
+async function fetchPhotos(
+  page: number = 1,
+  perPage: number = PHOTOS_PER_PAGE
+) {
+  try {
+    const client = createClient(process.env.NEXT_PUBLIC_PEXELS_API_KEY || "");
 
-        const formattedPhotos = response.photos.map((photo) => ({
-          id: photo.id,
-          title: photo.alt || "Untitled",
-          description: photo.alt || "No description available",
-          image: photo.src.large2x,
-          tags: ["Abstract", "Digital", "Art"],
-          photographer: photo.photographer,
-          photographerUrl: photo.photographer_url,
-        }));
+    const response = await client.photos.search({
+      query: "ai generated art",
+      page: page,
+      per_page: perPage,
+    });
 
-        setPhotos(formattedPhotos);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-      }
+    if ("error" in response) {
+      throw new Error(response.error);
+    }
+
+    const formattedPhotos: Photo[] = response.photos.map((photo) => ({
+      id: photo.id,
+      title: photo.alt || "Untitled",
+      description: photo.alt || "No description available",
+      image: photo.src.large2x,
+      tags: ["Abstract", "Digital", "Art"],
+      photographer: photo.photographer,
+      photographerUrl: photo.photographer_url,
+    }));
+
+    return {
+      photos: formattedPhotos,
+      totalResults: response.total_results,
+      page: response.page,
+      perPage: response.per_page,
     };
+  } catch (error) {
+    console.error("Error fetching photos:", error);
+    throw error;
+  }
+}
 
-    fetchPhotos();
-  }, []);
+export default async function GalleryPage({ searchParams }: GalleryProps) {
+  const currentPage = Number(searchParams.page) || 1;
+  const perPage = Number(searchParams.per_page) || PHOTOS_PER_PAGE;
 
-  if (loading) {
+  try {
+    const data = await fetchPhotos(currentPage, perPage);
+    const { photos, totalResults, page } = data;
+
+    const totalPages = Math.ceil(totalResults / perPage);
+    const hasNextPage = currentPage < totalPages;
+    const hasPrevPage = currentPage > 1;
+
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-300">
-            Loading gallery...
+      <>
+        {totalPages ? (
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-12">
+            Page {page} of {totalPages} • {totalResults.toLocaleString()} total
+            images
           </p>
-        </div>
-      </div>
-    );
-  }
+        ) : (
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-12">
+            No images found
+          </p>
+        )}
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">Error: {error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-4">Gallery</h1>
-        <p className="text-center text-gray-600 dark:text-gray-300 mb-12">
-          Explore our collection of AI-generated artwork
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {photos.map((photo) => (
             <div
               key={photo.id}
               className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transform transition-transform hover:scale-105"
             >
               <div className="relative aspect-square">
-                <img
+                <OpImage
                   src={photo.image}
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover h-full"
+                  alt={photo.title}
+                  width={400}
+                  height={400}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 />
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">{photo.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
+              <div className="p-4">
+                <h3 className="text-lg font-semibold mb-2 line-clamp-2">
+                  {photo.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
                   {photo.description}
                 </p>
+                <a
+                  href={photo.photographerUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300"
+                >
+                  Photo by {photo.photographer}
+                </a>
               </div>
             </div>
           ))}
         </div>
+
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          hasNextPage={hasNextPage}
+          hasPrevPage={hasPrevPage}
+        />
+      </>
+    );
+  } catch (error) {
+    console.error("Error loading gallery:", error);
+    return (
+      <div className="text-center m-auto h-full min-h-96  flex flex-col justify-center items-center">
+        <p className="text-red-500 mb-4">
+          Error loading gallery:{" "}
+          {error instanceof Error ? error.message : "Unknown error"}
+        </p>
       </div>
-    </div>
-  );
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+
 export default function Hero() {
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -9,9 +10,10 @@ export default function Hero() {
         loop
         muted
         playsInline
+        preload="auto"
         className="absolute top-0 left-0 w-full h-full object-cover"
       >
-        <source src="/2.mp4" type="video/mp4" />
+        <source src="/Professional_Mode_The_dog_jumps_onto_the_man_s_lap.mp4" type="video/mp4" />
       </video>
 
       {/* Overlay */}
@@ -19,7 +21,7 @@ export default function Hero() {
 
       {/* Content */}
       <div className="container mx-auto px-4 text-center relative z-10">
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white">
+        <h1 className="text-4xl md:text-7xl font-bold mb-6 text-white">
           MagicMoments
         </h1>
         <p className="text-xl md:text-2xl mb-8 text-white">

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import OpImage from "@/app/components/OpImage";
 
 export default function Gallery() {
   return (
@@ -13,8 +13,11 @@ export default function Gallery() {
               key={num}
               className="relative aspect-square overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow"
             >
-              <img
+              <OpImage
                 src={`/${num}.png`}
+                alt={`Image ${num}`}
+                width={500}
+                height={500}
                 className="object-cover hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               />

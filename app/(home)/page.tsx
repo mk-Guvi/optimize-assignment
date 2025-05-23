@@ -1,7 +1,7 @@
-import Hero from "./components/Hero";
-import Features from "./components/Features";
-import Gallery from "./components/Gallery";
-import FontShowcase from "./components/FontShowcase";
+import Hero from "./_components/Hero";
+import Features from "./_components/Features";
+import Gallery from "./_components/Gallery";
+import FontShowcase from "./_components/FontShowcase";
 
 const features = [
   {

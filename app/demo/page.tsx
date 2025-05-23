@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import PromptInput from "../components/PromptInput";
-import GeneratedImage from "../components/GeneratedImage";
+import PromptInput from "./_components/PromptInput";
+import GeneratedImage from "./_components/GeneratedImage";
+import BaseLayout from "../components/layout/BaseLayout";
+
 
 export default function Demo() {
   const [prompt, setPrompt] = useState("");
@@ -20,32 +22,28 @@ export default function Demo() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-8">
-          Try MagicMoments
-        </h1>
+    <BaseLayout>
+      <h1 className="text-4xl font-bold text-center mb-8">Try MagicMoments</h1>
 
-        <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-          <PromptInput
-            prompt={prompt}
-            setPrompt={setPrompt}
-            isGenerating={isGenerating}
-            onGenerate={handleGenerate}
-          />
+      <div className="max-w-2xl min-h-80 mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <PromptInput
+          prompt={prompt}
+          setPrompt={setPrompt}
+          isGenerating={isGenerating}
+          onGenerate={handleGenerate}
+        />
 
-          {generatedImage && <GeneratedImage imageUrl={generatedImage} />}
-        </div>
-
-        <div className="mt-12 text-center">
-          <p className="text-gray-600 dark:text-gray-300">
-            Want to create more? Check out our{" "}
-            <a href="/pricing" className="text-purple-600 hover:underline">
-              pricing plans
-            </a>
-          </p>
-        </div>
+        {generatedImage && <GeneratedImage imageUrl={generatedImage} />}
       </div>
-    </div>
+
+      <div className="mt-12 text-center">
+        <p className="text-gray-600 dark:text-gray-300">
+          Want to create more? Check out our{" "}
+          <a href="/pricing" className="text-purple-600 hover:underline">
+            pricing plans
+          </a>
+        </p>
+      </div>
+    </BaseLayout>
   );
 }

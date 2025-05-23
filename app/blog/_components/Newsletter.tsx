@@ -1,3 +1,6 @@
+import { Button } from "@/app/components/common/Button";
+import { Input } from "@/app/components/common/Input";
+
 export default function Newsletter() {
   return (
     <div className="mt-12 text-center">
@@ -5,18 +8,17 @@ export default function Newsletter() {
       <p className="text-gray-600 dark:text-gray-300 mb-6">
         Subscribe to our newsletter for the latest articles and updates
       </p>
-      <form className="max-w-md mx-auto flex gap-4">
-        <input
+      <form className="max-w-md  flex-wrap flex gap-4">
+        <Input
           type="email"
           placeholder="Enter your email"
-          className="flex-1 px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          className="flex-1"
+          variant="default"
+          inputSize="md"
         />
-        <button
-          type="submit"
-          className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-        >
+        <Button type="submit" className="mx-auto" variant="primary" size="md">
           Subscribe
-        </button>
+        </Button>
       </form>
     </div>
   );
