@@ -12,10 +12,11 @@ The website has:
 - gallery
 - pricing
 
+### Deployment URLS :
 
-Here's a cleaned-up and professional version of your changes using the `Where / What / Why` format, ideal for inclusion in a README or assignment submission:
+Before Changes : https://optimize-assignment-gamma.vercel.app/
 
----
+After Changes : https://optimize-assignment-git-feature-optimza-39667b-mkguvis-projects.vercel.app/
 
 ### CHANGES DONE
 
